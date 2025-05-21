@@ -1,11 +1,13 @@
 import flet as ft
+import sqlite3
+from datetime import timedelta
 
 # Função principal
 def main(page: ft.Page):
     page.fonts = {
         'Racer' : 'https://fonts.cdnfonts.com/css/racer'
     }
-    page.title = "EA Fórumula USA"
+    page.title = "EA Fórumla Vegas"
     page.window.resizable= False
     page.window.full_screen = False      # Não permite tela cheia
     page.window.maximized = False
@@ -15,60 +17,83 @@ def main(page: ft.Page):
     page.window.center()
 
     # Declaração de variáveis
-
-    # Botões
-
-    # Botão Miami
-    botao1 = ft.TextButton(
-        content=ft.Container(
-            content=ft.Column(
-                [
-                    ft.Text(value="MIAMI", size=50, color=ft.Colors.BLACK, font_family='Racer'),
-                ],
-            ),
-            width=320,
-            height=160,
-            bgcolor=ft.Colors.WHITE
-        ),
-    )
-
-    # Botão Texas
-    botao2 = ft.TextButton(
-        content=ft.Container(
-            content=ft.Column(
-                [
-                    ft.Text(value="TEXAS", size=50, color=ft.Colors.BLACK, font_family='Racer'),
-                ],
-            ),
-            width=320,
-            height=160,
-            bgcolor=ft.Colors.WHITE
-        ),
-    )
-
-    # Botão Vegas
-    botao3 = ft.TextButton(
-        content=ft.Container(
-            content=ft.Column(
-                [
-                    ft.Text(value="LAS VEGAS", size=50, color=ft.Colors.BLACK),
-                ],
-            ),
-            width=320,
-            height=100,
-            bgcolor=ft.Colors.WHITE,
-            border=ft.border.all(2, ft.Colors.BLACK),  # Borda de 2px preta
-            border_radius=10
-        ),
-    )
-
+    nome = ft.TextField(label="Digite seu Nome", value="", width=320, border_color="white"),
     # Organização dos containers(div)
 
     # Espaço para fomulário que alimentará um SQLite
     container_form = ft.Container(
         height=600,
         width=500,
-        bgcolor=ft.Colors.TRANSPARENT
+        bgcolor=ft.Colors.TRANSPARENT,
+        padding=30,
+        alignment=ft.alignment.top_left,
+        content=ft.Column(
+            controls=[
+                ft.Text(
+                    value="Adicione sua Volta",
+                    size=40,
+                    color=ft.Colors.WHITE
+                ),
+                ft.Container(
+                    content=ft.Row(
+                        controls=[
+                            ft.TextField(label="Minutos", width=100, value="", border_color="white"),
+                            ft.TextField(label="Segundos", width=100, value="", border_color="white"),
+                            ft.TextField(label="Milésimos", width=100, value="", border_color="white")
+                        ]
+                    )
+                ),
+                ft.Text(
+                    value="Setores",
+                    size=40,
+                    color=ft.Colors.WHITE
+                ),
+                ft.Container(
+                    content=ft.Row(
+                        controls=[
+                            ft.TextField(label="S1", value="", width=100, border_color="white"),
+                            ft.TextField(label="S2", value="", width=100, border_color="white"),
+                            ft.TextField(label="S3", value="", width=100, border_color="white")
+                        ]
+                    )
+                ),
+                ft.Text(
+                    value="Pessoa",
+                    size=40,
+                    color=ft.Colors.WHITE
+                ),
+                ft.Container(
+                    content=ft.Row(
+                        controls=[
+                            
+
+                        ]
+                    )
+                ),
+                ft.Text(
+                    value="Equipe",
+                    size=40,
+                    color=ft.Colors.WHITE
+                ),
+                ft.Container(
+                    content=ft.Row(
+                        controls=[
+                            ft.TextField(label="Digite a Equipe", value="", width=320, border_color="white"),
+                        ]
+                    )
+                ),
+                ft.Container(height=10),
+                ft.ElevatedButton(
+                    width=320,
+                    bgcolor=ft.Colors.CYAN,
+                    content=ft.Text(
+                        value="Adicionar Volta",
+                        color=ft.Colors.WHITE,
+                        size=30
+                    )
+                )
+            ]
+        )
     )
 
     # Espaço para se visualizar dados de nosso SQLite
@@ -83,14 +108,14 @@ def main(page: ft.Page):
     container_buttons = ft.Container(
         height=200,
         width=1200,
+        alignment=ft.alignment.top_center,
         bgcolor=ft.Colors.TRANSPARENT,
-        content=ft.Row(
-            controls=[
-                botao1,
-                botao2,
-                botao3
-            ]
-        )
+        content=ft.Text(
+            italic=True,
+            value="EA Fórmula Vegas 2025",
+            size=90,
+            color=ft.Colors.WHITE
+        )         
     )
 
 
@@ -115,6 +140,12 @@ def main(page: ft.Page):
                 height=800,
                 width=1500,
             )),
+            ft.Container(
+                height=800,
+                width=1500,
+                bgcolor=ft.Colors.BLACK,
+                opacity=0.4
+            ),
             container_main,
         ]
     )
@@ -123,3 +154,16 @@ def main(page: ft.Page):
 
 ft.app(target=main)
 
+# Lista de coisas a fazer
+
+# Interface
+# Terminar os botões
+# Alinhamento containers(div)
+# formulario
+# input
+# melhor volta
+# alternar entre páginas
+
+# back-end
+# criar sqlite
+# interligar os dois
