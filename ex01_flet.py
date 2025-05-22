@@ -17,7 +17,6 @@ def main(page: ft.Page):
     page.window.center()
 
     # Declaração de variáveis
-    nome = ft.TextField(label="Digite seu Nome", value="", width=320, border_color="white"),
     # Organização dos containers(div)
 
     # Espaço para fomulário que alimentará um SQLite
@@ -65,8 +64,7 @@ def main(page: ft.Page):
                 ft.Container(
                     content=ft.Row(
                         controls=[
-                            
-
+                            ft.TextField(label="Digite seu Nome", value="", width=320, border_color="white"),
                         ]
                     )
                 ),
