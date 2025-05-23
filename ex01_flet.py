@@ -1,12 +1,9 @@
 import flet as ft
 import sqlite3
-from datetime import timedelta
+
 
 # Função principal
 def main(page: ft.Page):
-    page.fonts = {
-        'Racer' : 'https://fonts.cdnfonts.com/css/racer'
-    }
     page.title = "EA Fórumla Vegas"
     page.window.resizable= False
     page.window.full_screen = False      # Não permite tela cheia
@@ -16,7 +13,86 @@ def main(page: ft.Page):
     page.window.height = 800
     page.window.center()
 
+    # Cria ou conecta o banco
+    connection = sqlite3.connect("volta.db")
+    cursor = connection.cursor()
+
     # Declaração de variáveis
+    nome = ft.TextField(label="Digite seu Nome", width=320, border_color="white")
+    equipe = ft.TextField(label="Digite a Equipe", width=320, border_color="white")
+    minutos = ft.TextField(label="Minutos", width=100, border_color="white")
+    segundos = ft.TextField(label="Segundos", width=100, border_color="white")
+    milesimos = ft.TextField(label="Milésimos", width=100, border_color="white")
+    s1 = ft.TextField(label="S1", width=100, border_color="white")                      
+    s2 = ft.TextField(label="S2", width=100, border_color="white")                       
+    s3 = ft.TextField(label="S3", width=100, border_color="white")
+
+    # Banco de dados
+    def adicionar_volta(e):
+        # Tabela Victor
+        if nome.value == "Victor":
+        # Deletando a tabela
+            cursor.execute("""
+        DROP TABLE IF NOT EXISTS voltas_vats
+        """)
+            
+            # Criando tabela
+            cursor.execute("""
+        CREATE TABLE IF NOT EXISTS voltas_vats (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome TEXT NOT NULL,
+                minutos INTEGER NOT NULL,
+                segundos INTEGER NOT NULL,
+                milesimos INTEGER NOT NULL,
+                s1 REAL NOT NULL,
+                s2 REAL NOT NULL,
+                s3 REAL NOT NULL,
+                equipe TEXT
+        )""")
+            
+            # Adiciona Valores na tabela 
+            cursor.execute("""
+        INSERT INTO (nome, minutos, segundos, milesimos, s1, s2, s3, equipe)
+        VALUES( ?, ?, ?, ?, ?, ?, ?, ?)
+        """), nome.value, minutos.value, segundos.value, milesimos.value, s1.value, s2.value, s3.value, equipe.value
+
+            
+        # Tabela Gabriel
+        elif nome.value == "Gabriel":
+            # Deletando a tabela
+            cursor.execute("""
+        DROP TABLE IF NOT EXISTS voltas_gvts
+        """)
+            
+            # Criando tabela
+            cursor.execute("""
+        CREATE TABLE IF NOT EXISTS voltas_gvts (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome TEXT NOT NULL,
+                minutos INTEGER NOT NULL,
+                segundos INTEGER NOT NULL,
+                milesimos INTEGER NOT NULL,
+                s1 REAL NOT NULL,
+                s2 REAL NOT NULL,
+                s3 REAL NOT NULL,
+                equipe TEXT
+        )""")
+            
+            # Adiciona valores na tabela
+            cursor.execute("""
+        INSERT INTO (nome, minutos, segundos, milesimos, s1, s2, s3, equipe)
+        VALUES( ?, ?, ?, ?, ?, ?, ?, ?)
+        """), nome.value, minutos.value, segundos.value, milesimos.value, s1.value, s2.value, s3.value, equipe.value
+            
+        # Se não for nenhum dos dois, simplesmente não faz nada
+        else:
+            pass
+
+        # Atualiza o banco de dados
+        connection.commit()
+        connection.close()
+        page.update() 
+
     # Organização dos containers(div)
 
     # Espaço para fomulário que alimentará um SQLite
@@ -36,9 +112,9 @@ def main(page: ft.Page):
                 ft.Container(
                     content=ft.Row(
                         controls=[
-                            ft.TextField(label="Minutos", width=100, value="", border_color="white"),
-                            ft.TextField(label="Segundos", width=100, value="", border_color="white"),
-                            ft.TextField(label="Milésimos", width=100, value="", border_color="white")
+                            minutos,
+                            segundos,
+                            milesimos
                         ]
                     )
                 ),
@@ -50,9 +126,9 @@ def main(page: ft.Page):
                 ft.Container(
                     content=ft.Row(
                         controls=[
-                            ft.TextField(label="S1", value="", width=100, border_color="white"),
-                            ft.TextField(label="S2", value="", width=100, border_color="white"),
-                            ft.TextField(label="S3", value="", width=100, border_color="white")
+                            s1,
+                            s2,
+                            s3
                         ]
                     )
                 ),
@@ -64,7 +140,7 @@ def main(page: ft.Page):
                 ft.Container(
                     content=ft.Row(
                         controls=[
-                            ft.TextField(label="Digite seu Nome", value="", width=320, border_color="white"),
+                            nome
                         ]
                     )
                 ),
@@ -76,7 +152,7 @@ def main(page: ft.Page):
                 ft.Container(
                     content=ft.Row(
                         controls=[
-                            ft.TextField(label="Digite a Equipe", value="", width=320, border_color="white"),
+                            equipe,
                         ]
                     )
                 ),
@@ -87,7 +163,7 @@ def main(page: ft.Page):
                     content=ft.Text(
                         value="Adicionar Volta",
                         color=ft.Colors.WHITE,
-                        size=30
+                        size=30,
                     )
                 )
             ]
@@ -98,7 +174,17 @@ def main(page: ft.Page):
     container_list = ft.Container(
         height=600,
         width=700,
-        bgcolor=ft.Colors.TRANSPARENT
+        bgcolor=ft.Colors.TRANSPARENT,
+        content=ft.Column(
+            controls=[
+                ft.Text(
+                    value="   Melhores Voltas",
+                    color="white",
+                    size=60,
+                    italic=True  
+                )
+            ]
+        )
     )
 
     # Local onde estará os três principais botões
@@ -151,6 +237,7 @@ def main(page: ft.Page):
     page.add(simple_main)
 
 ft.app(target=main)
+
 
 # Lista de coisas a fazer
 
